@@ -76,9 +76,9 @@ def delete_student():
     name = request.form["name"]
     df = df[df["Name"] != name]
     df.to_csv(FILE, index=False)
-
     return redirect("/")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
 
