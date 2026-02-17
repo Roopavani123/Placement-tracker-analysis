@@ -17,7 +17,7 @@ else:
 @app.route("/", methods=["GET"])
 def home():
     global df
-
+    
     # Search by name
     search_name = request.args.get("name", "").strip()
 
@@ -27,14 +27,13 @@ def home():
     else:
         filtered_df = df
         message = ""
-
     # Dashboard stats (overall)
     total = len(df)
     placed_df = df[df["Status"] == "Placed"]
     placed = len(placed_df)
     not_placed = total - placed
     percentage = round((placed / total) * 100, 2) if total > 0 else 0
-
+    
     # Charts data (from placed students)
     company_chart = dict(Counter(placed_df["Company"]))
     dept_chart = dict(Counter(placed_df["Department"]))
@@ -63,16 +62,12 @@ def add_student():
         "Package": float(request.form["package"]),
         "Status": request.form["status"]
     }
-
     df = pd.concat([df, pd.DataFrame([new_data])], ignore_index=True)
     df.to_csv(FILE, index=False)
-
     return redirect("/")
-
 @app.route("/delete", methods=["POST"])
 def delete_student():
     global df
-
     name = request.form["name"]
     df = df[df["Name"] != name]
     df.to_csv(FILE, index=False)
@@ -80,5 +75,3 @@ def delete_student():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
-
