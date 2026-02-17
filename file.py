@@ -2,18 +2,14 @@ from flask import Flask, render_template, request, redirect
 import pandas as pd
 import os
 from collections import Counter
-
 app = Flask(__name__)
-
 FILE = "placement_data.csv"
-
 # Load or create CSV
 if os.path.exists(FILE):
     df = pd.read_csv(FILE, on_bad_lines="skip")
 else:
     df = pd.DataFrame(columns=["Name", "Department", "Company", "Package", "Status"])
     df.to_csv(FILE, index=False)
-
 @app.route("/", methods=["GET"])
 def home():
     global df
@@ -75,3 +71,4 @@ def delete_student():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
