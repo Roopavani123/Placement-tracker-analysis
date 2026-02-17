@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Placement Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<script>
+    function showMessage(msg){
+        if(msg){
+            alert(msg);
+        }
+    }
+</script>
+</head>
+
+<body onload="showMessage('{{ message }}')">
+
+<!-- HEADER WITH LOGO -->
+<div class="top-header">
+    <!-- LOGO IMAGE -->
+    <img src="{{ url_for('static', filename='aditya.png') }}"
+         alt="Placement Tracker Logo"
+         class="logo">
+
+    <h1>Placement Tracker Dashboard</h1>
+</div>
+
+<!-- POPUP MESSAGE BOX -->
+{% if message %}
+<div id="popup" class="popup">
+    {{ message }}
+</div>
+
+<script>
+setTimeout(()=>{
+    document.getElementById("popup").style.display="none";
+},3000)
+</script>
+{% endif %}
+
+<!-- SEARCH BY NAME -->
+<form method="GET" action="/" class="filter-bar">
+    <input type="text" name="name" placeholder="Enter Student Name">
+    <button type="submit">Search</button>
+</form>
+
+<!-- ADD STUDENT -->
+<form method="POST" action="/add" class="filter-bar">
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="text" name="department" placeholder="Department" required>
+    <input type="text" name="company" placeholder="Company" required>
+    <input type="number" step="0.1" name="package" placeholder="Package" required>
+
+    <select name="status">
+        <option value="Placed">Placed</option>
+        <option value="Not Placed">Not Placed</option>
+    </select>
+
+    <button type="submit">Enter</button>
+</form>
+
+<!-- DASHBOARD COUNTS -->
+<div class="stats">
+    <div class="stat-box"><h3>{{ total }}</h3>Total</div>
+    <div class="stat-box"><h3>{{ placed }}</h3>Placed</div>
+    <div class="stat-box"><h3>{{ not_placed }}</h3>Not Placed</div>
+    <div class="stat-box"><h3>{{ percentage }}%</h3>Percent</div>
+</div>
+
+<!-- PLACEMENT PROGRESS BAR -->
+<div class="progress-container">
+    <div class="progress-bar" style="width:{{percentage}}%">
+        {{percentage}}%
+    </div>
+</div>
+
+<h2>Student Details</h2>
+
+<table>
+<tr>
+    <th>Name</th>
+    <th>Department</th>
+    <th>Company</th>
+    <th>Package</th>
+    <th>Status</th>
+</tr>
+
+{% if students %}
+    {% for student in students %}
+    <tr class="{% if search_name and search_name.lower() == student.Name.lower() %}highlight{% endif %}">
+        <td>{{ student.Name }}</td>
+        <td>{{ student.Department }}</td>
+        <td>{{ student.Company }}</td>
+        <td>{{ student.Package }}</td>
+        <td class="{{ 'placed' if student.Status == 'Placed' else 'notplaced' }}">
+            {{ student.Status }}
+        </td>
+    </tr>
+    {% endfor %}
+{% else %}
+<tr>
+    <td colspan="5">No student found</td>
+</tr>
+{% endif %}
+</table>
+
+</body>
+</html>
