@@ -1,4 +1,3 @@
-# Placement-tracker-analysis
 # Placement Tracker Dashboard
 
 A Flask-based web application to track student placement details.
